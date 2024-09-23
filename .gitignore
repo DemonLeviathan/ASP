@@ -1,0 +1,10 @@
+# Папки Visual Studio
+.vs/
+bin/
+obj/
+# Файлы пользовательских настроек
+*.user
+*.suo
+*.sln.docstates
+# Логи
+*.log
