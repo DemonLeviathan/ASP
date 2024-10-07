@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Controller Demo</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Service Controller Demo</h1>
+
+    <h2>Current Result</h2>
+    <div id="current-result">Result: Not available</div>
+    <button id="get-result">Get Current Result</button>
+
+    <h2>Set New Result</h2>
+    <form id="post-result-form">
+        <label for="new-result">New Result:</label>
+        <input type="number" id="new-result" required>
+        <button type="submit">Post Result</button>
+    </form>
+
+    <h2>Add to Stack</h2>
+    <form id="put-result-form">
+        <label for="add-result">Add Number:</label>
+        <input type="number" id="add-result" required>
+        <button type="submit">Put Result</button>
+    </form>
+
+    <h2>Remove Top from Stack</h2>
+    <button id="delete-result">Delete Top Result</button>
+
+    <script>
+        $(document).ready(function () {
+            $('#get-result').click(function () {
+                $.ajax({
+                    url: 'https://localhost:44355/.vis', 
+                    type: 'GET',
+                    success: function (data) {
+                        $('#current-result').text('Result: ' + data.RESULT);
+                    },
+                    error: function () {
+                        alert('Error retrieving result.');
+                    }
+                });
+            });
+
+            $('#post-result-form').submit(function (event) {
+                event.preventDefault();
+
+                const newResult = $('#new-result').val();
+
+                $.ajax({
+                    url: 'https://localhost:44355/.vis/' + newResult,
+                    type: 'POST',
+                    success: function (data) {
+                        alert('New result set: ' + data.RESULT);
+                    },
+                    error: function () {
+                        alert('Error posting result.');
+                    }
+                });
+            });
+
+            $('#put-result-form').submit(function (event) {
+                event.preventDefault();
+
+                const addResult = $('#add-result').val();
+
+                $.ajax({
+                    url: 'https://localhost:44355/.vis/' + addResult,
+                    type: 'PUT',
+                    success: function (data) {
+                        alert('Added to stack: ' + data);
+                    },
+                    error: function () {
+                        alert('Error adding to stack.');
+                    }
+                });
+            });
+
+            $('#delete-result').click(function () {
+                $.ajax({
+                    url: 'https://localhost:44355/.vis',
+                    type: 'DELETE',
+                    success: function (data) {
+                        alert('Deleted top result from stack. Stack count: ' + data);
+                    },
+                    error: function () {
+                        alert('Error deleting result.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
